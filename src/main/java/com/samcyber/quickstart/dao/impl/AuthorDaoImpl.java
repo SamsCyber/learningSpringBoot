@@ -4,11 +4,14 @@ import com.samcyber.quickstart.dao.AuthorDao;
 import com.samcyber.quickstart.domain.Author;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
+@Component
 public class AuthorDaoImpl implements AuthorDao {
 
     private final JdbcTemplate jdbcTemplate;
@@ -26,8 +29,20 @@ public class AuthorDaoImpl implements AuthorDao {
     }
 
     @Override
-    public Optional<Author> findOne(int i){
-        return Optional.empty();
+    public Optional<Author> findOne(int authorId){
+        List<Author> results = jdbcTemplate.query(
+                "SELECT id, name, age FROM authors WHERE id = ? LIMIT 1",
+                new AuthorRowMapper(), authorId
+        );
+        return results.stream().findFirst();
+    }
+
+    @Override
+    public List<Author> find() {
+        return jdbcTemplate.query(
+                "SELECT id, name, age FROM authors",
+                new AuthorRowMapper()
+        );
     }
 
     public static class AuthorRowMapper implements RowMapper<Author>{

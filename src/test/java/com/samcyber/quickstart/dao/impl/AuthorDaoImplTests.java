@@ -1,14 +1,14 @@
 package com.samcyber.quickstart.dao.impl;
 
-import com.samcyber.quickstart.dao.impl.AuthorDaoImpl;
+import com.samcyber.quickstart.dao.TestDataUtil;
 import com.samcyber.quickstart.domain.Author;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -25,7 +25,7 @@ public class AuthorDaoImplTests {
 
     @Test
     public void testThatCreateAuthorGeneratesCorrectSql(){
-        Author author = new Author(1, "Jane Doe", 80);
+        Author author = TestDataUtil.createTestAuthorA();
         underTest.create(author);
 
         verify(jdbcTemplate).update(
@@ -39,8 +39,17 @@ public class AuthorDaoImplTests {
         underTest.findOne(1);
 
         verify(jdbcTemplate).query(
-                "SELECT id, name, age FROM authors WHERE id = ? LIMIT 1",
-                any(RowMapper.class), eq(1)
+                eq("SELECT id, name, age FROM authors WHERE id = ? LIMIT 1"),
+                ArgumentMatchers.<AuthorDaoImpl.AuthorRowMapper>any(), eq(1)
+        );
+    }
+
+    @Test
+    public void testThatFindManyGeneratesCorrectSql(){
+        underTest.find();
+        verify(jdbcTemplate).query(
+                eq("SELECT id, name, age FROM authors"),
+                ArgumentMatchers.<AuthorDaoImpl.AuthorRowMapper>any()
         );
     }
 }

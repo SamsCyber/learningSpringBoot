@@ -1,9 +1,10 @@
 package com.samcyber.quickstart.dao.impl;
 
-import com.samcyber.quickstart.dao.impl.BookDaoImpl;
+import com.samcyber.quickstart.dao.TestDataUtil;
 import com.samcyber.quickstart.domain.Book;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -24,15 +25,30 @@ public class BookDaoImplTests {
 
     @Test
     public void testThatCreateBookGeneratesCorrectSql() {
-        Book book = new Book();
-        book.setIsbn("987-654-321-0");
-        book.setTitle("Big ol boys");
-        book.setAuthorId(1);
+        Book book = TestDataUtil.createTestBookA();
 
         underTest.create(book);
         verify(jdbcTemplate).update(
                 eq("INSERT INTO books (isbn, title, author_id) VALUES (?, ?, ?)"),
                 eq("987-654-321-0"), eq("Big ol boys"), eq(1)
+        );
+    }
+
+    @Test
+    public void testThatFindOneBookGeneratesCorrectSql(){
+        underTest.findOne("987-654-321-0");
+        verify(jdbcTemplate).query(
+                eq("SELECT isbn, title, author_id FROM books WHERE isbn = ? LIMIT 1"),
+                ArgumentMatchers.<BookDaoImpl.BookRowMapper>any(), eq("987-654-321-0")
+        );
+    }
+
+    @Test
+    public void testThatFindManyGeneratesCorrectSql(){
+        underTest.find();
+        verify(jdbcTemplate).query(
+                eq("SELECT isbn, title, author_id FROM books"),
+                ArgumentMatchers.<BookDaoImpl.BookRowMapper>any()
         );
     }
 }

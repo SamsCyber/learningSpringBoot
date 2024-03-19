@@ -14,10 +14,10 @@ public class Book {
         this.authorId = null;
     }
 
-    public Book(String isbn, String text, Author author){
+    public Book(String isbn, String text, int authorId){
         this.isbn = isbn;
         this.title = text;
-        this.authorId = author.getId();
+        this.authorId = authorId;
     }
 
     public String getIsbn(){
