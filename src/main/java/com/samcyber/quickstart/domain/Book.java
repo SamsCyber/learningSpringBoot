@@ -60,7 +60,7 @@ public class Book {
 
     @Override
     public String toString(){
-        return "UserData{" +
+        return "BookData{" +
                 "isbn='" + isbn +
                 "', text='" + title + "'" +
                 ", authorId=" + authorId + '}';
