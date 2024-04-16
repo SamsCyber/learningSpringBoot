@@ -1,4 +1,4 @@
-package com.samcyber.quickstart.dao;
+package com.samcyber.quickstart;
 
 import com.samcyber.quickstart.domain.Author;
 import com.samcyber.quickstart.domain.Book;
@@ -20,14 +20,14 @@ public final class TestDataUtil {
         return new Author(3, "Peter Molyneux", 22);
     }
 
-    public static Book createTestBookA() {
-        return new Book("987-654-321-0", "Big ol boys", 1);
+    public static Book createTestBookA(final Author author) {
+        return new Book("987-654-321-0", "Big ol boys", author);
     }
-    public static Book createTestBookB() {
-        return new Book("123-456-789-0", "Big buffoons", 2);
+    public static Book createTestBookB(final Author author) {
+        return new Book("123-456-789-0", "Big buffoons", author);
     }
-    public static Book createTestBookC() {
-        return new Book("999-666-333-1", "Big ol bear hug", 3);
+    public static Book createTestBookC(final Author author) {
+        return new Book("999-666-333-1", "Big ol bear hug", author);
     }
 
 

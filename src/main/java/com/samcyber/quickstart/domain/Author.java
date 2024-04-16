@@ -1,11 +1,16 @@
 package com.samcyber.quickstart.domain;
 
+import jakarta.persistence.*;
 import org.springframework.lang.NonNull;
 
 import java.util.Objects;
 
+@Entity
+@Table(name = "authors")
 public class Author {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_id_seq")
     private Integer id;
     private String name;
     private Integer age;

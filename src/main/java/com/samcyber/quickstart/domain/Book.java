@@ -1,12 +1,23 @@
 package com.samcyber.quickstart.domain;
 
+import jakarta.persistence.*;
 import org.springframework.lang.NonNull;
 import java.util.Objects;
 
+@Entity
+@Table(name = "books")
 public class Book {
+
+    @Id
     private String isbn;
     private String title;
-    private Integer authorId;
+
+//    changed this authorId to be of type Author instead of Integer, this is possible, I believe, because
+//    now we are using JPA, the API understands java objects and their differences and handles conversion for us
+//    when interacting with the database.
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "author_id")
+    private Author authorId;
 
     public Book(){
         this.isbn = null;
@@ -14,7 +25,7 @@ public class Book {
         this.authorId = null;
     }
 
-    public Book(String isbn, String text, int authorId){
+    public Book(String isbn, String text, Author authorId){
         this.isbn = isbn;
         this.title = text;
         this.authorId = authorId;
@@ -26,7 +37,7 @@ public class Book {
     public String getTitle(){
         return title;
     }
-    public int getAuthorId(){
+    public Author getAuthorId(){
         return authorId;
     }
     public void setTitle(String text){
@@ -37,7 +48,7 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public void setAuthorId(int id){
+    public void setAuthorId(Author id){
         this.authorId = id;
     }
 
@@ -54,7 +65,7 @@ public class Book {
         int result = 17;
         result = 31 * result + isbn.hashCode();
         result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + authorId;
+        result = 31 * result + authorId.getId();
         return result;
     }
 
