@@ -13,7 +13,7 @@ public final class TestDataUtil {
     }
 
     public static Author createTestAuthorB() {
-        return new Author(2, "John Doe", 50);
+        return new Author(2, "John Doe", 49);
     }
 
     public static Author createTestAuthorC() {
@@ -21,13 +21,13 @@ public final class TestDataUtil {
     }
 
     public static Book createTestBookA(final Author author) {
-        return new Book("987-654-321-0", "Big ol boys", author);
+        return new Book("987-654-321-0", "Big ol boys", author, "1999");
     }
     public static Book createTestBookB(final Author author) {
-        return new Book("123-456-789-0", "Big buffoons", author);
+        return new Book("123-456-789-0", "Big buffoons", author, "1870");
     }
     public static Book createTestBookC(final Author author) {
-        return new Book("999-666-333-1", "Big ol bear hug", author);
+        return new Book("999-666-333-1", "Big ol bear hug", author, "10");
     }
 
 

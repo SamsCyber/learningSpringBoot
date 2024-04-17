@@ -19,16 +19,20 @@ public class Book {
     @JoinColumn(name = "author_id")
     private Author authorId;
 
+    private String yearPublished;
+
     public Book(){
         this.isbn = null;
         this.title = null;
         this.authorId = null;
+        this.yearPublished = null;
     }
 
-    public Book(String isbn, String text, Author authorId){
+    public Book(String isbn, String text, Author authorId, String yearPublished){
         this.isbn = isbn;
         this.title = text;
         this.authorId = authorId;
+        this.yearPublished = yearPublished;
     }
 
     public String getIsbn(){
@@ -40,6 +44,9 @@ public class Book {
     public Author getAuthorId(){
         return authorId;
     }
+    public String getYearPublished() {
+        return yearPublished;
+    }
     public void setTitle(String text){
         this.title = text;
     }
@@ -50,6 +57,9 @@ public class Book {
 
     public void setAuthorId(Author id){
         this.authorId = id;
+    }
+    public void setYearPublished(String year) {
+        this.yearPublished = year;
     }
 
     @Override
@@ -74,6 +84,7 @@ public class Book {
         return "BookData{" +
                 "isbn='" + isbn +
                 "', text='" + title + "'" +
-                ", authorId=" + authorId + '}';
+                ", authorId=" + authorId.getId() + ", yearPublished='" +
+                yearPublished + "'}";
     }
 }
