@@ -1,8 +1,8 @@
 package com.samcyber.quickstart.repositories;
 
 import com.samcyber.quickstart.TestDataUtil;
-import com.samcyber.quickstart.domain.Author;
-import com.samcyber.quickstart.domain.Book;
+import com.samcyber.quickstart.domain.entities.AuthorEntity;
+import com.samcyber.quickstart.domain.entities.BookEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,58 +28,58 @@ public class BookRepositoryIntegrationTests {
 
     @Test
     public void TestThatBookCanBeCreatedAndRecalled(){
-        Author author = TestDataUtil.createTestAuthorA();
-        Book book = TestDataUtil.createTestBookA(author);
-        underTest.save(book);
-        Optional<Book> result = underTest.findById(book.getIsbn());
+        AuthorEntity authorEntity = TestDataUtil.createTestAuthorA();
+        BookEntity bookEntity = TestDataUtil.createTestBookA(authorEntity);
+        underTest.save(bookEntity);
+        Optional<BookEntity> result = underTest.findById(bookEntity.getIsbn());
         assertThat(result).isPresent();
-        assertThat(result.get()).isEqualTo(book);
+        assertThat(result.get()).isEqualTo(bookEntity);
     }
 
     @Test
     public void TestThatMultipleBooksCanBeCreatedAndRecalled(){
-        Author authorA = TestDataUtil.createTestAuthorA();
-        Author authorB = TestDataUtil.createTestAuthorB();
+        AuthorEntity authorEntityA = TestDataUtil.createTestAuthorA();
+        AuthorEntity authorEntityB = TestDataUtil.createTestAuthorB();
 
-        Book bookA = TestDataUtil.createTestBookA(authorA);
-        Book bookB = TestDataUtil.createTestBookB(authorB);
-        Book bookC = TestDataUtil.createTestBookC(authorB);
+        BookEntity bookEntityA = TestDataUtil.createTestBookA(authorEntityA);
+        BookEntity bookEntityB = TestDataUtil.createTestBookB(authorEntityB);
+        BookEntity bookEntityC = TestDataUtil.createTestBookC(authorEntityB);
 
-        underTest.save(bookA);
-        underTest.save(bookB);
-        underTest.save(bookC);
+        underTest.save(bookEntityA);
+        underTest.save(bookEntityB);
+        underTest.save(bookEntityC);
 
-        Iterable<Book> result = underTest.findAll();
+        Iterable<BookEntity> result = underTest.findAll();
         assertThat(result)
                 .hasSize(3)
-                .containsExactly(bookA, bookB, bookC);
+                .containsExactly(bookEntityA, bookEntityB, bookEntityC);
     }
 
     @Test
     public void TestThatBooksCanBeUpdated(){
-        Author author = TestDataUtil.createTestAuthorA();
+        AuthorEntity authorEntity = TestDataUtil.createTestAuthorA();
 
-        Book book = TestDataUtil.createTestBookA(author);
-        underTest.save(book);
+        BookEntity bookEntity = TestDataUtil.createTestBookA(authorEntity);
+        underTest.save(bookEntity);
 
-        book.setIsbn("TestingUpdated");
-        underTest.save(book);
+        bookEntity.setIsbn("TestingUpdated");
+        underTest.save(bookEntity);
 
-        Optional<Book> result = underTest.findById("TestingUpdated");
+        Optional<BookEntity> result = underTest.findById("TestingUpdated");
         assertThat(result).isPresent();
-        assertThat(result.get()).isEqualTo(book);
+        assertThat(result.get()).isEqualTo(bookEntity);
     }
 
     @Test
     public void TestThatBooksCanBeDeleted(){
-        Author author = TestDataUtil.createTestAuthorA();
-        Book book = TestDataUtil.createTestBookA(author);
-        underTest.save(book);
-        Optional<Book> resultInitial = underTest.findById(book.getIsbn());
+        AuthorEntity authorEntity = TestDataUtil.createTestAuthorA();
+        BookEntity bookEntity = TestDataUtil.createTestBookA(authorEntity);
+        underTest.save(bookEntity);
+        Optional<BookEntity> resultInitial = underTest.findById(bookEntity.getIsbn());
         assertThat(resultInitial).isPresent();
 
-        underTest.deleteById(book.getIsbn());
-        Optional<Book> result = underTest.findById(book.getIsbn());
+        underTest.deleteById(bookEntity.getIsbn());
+        Optional<BookEntity> result = underTest.findById(bookEntity.getIsbn());
         assertThat(result).isEmpty();
     }
 }

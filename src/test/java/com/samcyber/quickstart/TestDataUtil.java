@@ -1,33 +1,33 @@
 package com.samcyber.quickstart;
 
-import com.samcyber.quickstart.domain.Author;
-import com.samcyber.quickstart.domain.Book;
+import com.samcyber.quickstart.domain.entities.AuthorEntity;
+import com.samcyber.quickstart.domain.entities.BookEntity;
 
 public final class TestDataUtil {
 
     private TestDataUtil(){}
 
 
-    public static Author createTestAuthorA() {
-        return new Author(1, "Jane Doe", 80);
+    public static AuthorEntity createTestAuthorA() {
+        return new AuthorEntity(1, "Jane Doe", 80);
     }
 
-    public static Author createTestAuthorB() {
-        return new Author(2, "John Doe", 49);
+    public static AuthorEntity createTestAuthorB() {
+        return new AuthorEntity(2, "John Doe", 49);
     }
 
-    public static Author createTestAuthorC() {
-        return new Author(3, "Peter Molyneux", 22);
+    public static AuthorEntity createTestAuthorC() {
+        return new AuthorEntity(3, "Peter Molyneux", 22);
     }
 
-    public static Book createTestBookA(final Author author) {
-        return new Book("987-654-321-0", "Big ol boys", author, "1999");
+    public static BookEntity createTestBookA(final AuthorEntity authorEntity) {
+        return new BookEntity("987-654-321-0", "Big ol boys", authorEntity, "1999");
     }
-    public static Book createTestBookB(final Author author) {
-        return new Book("123-456-789-0", "Big buffoons", author, "1870");
+    public static BookEntity createTestBookB(final AuthorEntity authorEntity) {
+        return new BookEntity("123-456-789-0", "Big buffoons", authorEntity, "1870");
     }
-    public static Book createTestBookC(final Author author) {
-        return new Book("999-666-333-1", "Big ol bear hug", author, "10");
+    public static BookEntity createTestBookC(final AuthorEntity authorEntity) {
+        return new BookEntity("999-666-333-1", "Big ol bear hug", authorEntity, "10");
     }
 
 

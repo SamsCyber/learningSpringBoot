@@ -1,13 +1,12 @@
-package com.samcyber.quickstart.domain;
+package com.samcyber.quickstart.domain.entities;
 
 import jakarta.persistence.*;
-import org.springframework.lang.NonNull;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "authors")
-public class Author {
+public class AuthorEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_id_seq")
@@ -15,13 +14,13 @@ public class Author {
     private String name;
     private Integer age;
 
-    public Author(){
+    public AuthorEntity(){
         this.id = null;
         this.name = null;
         this.age = null;
     }
 
-    public Author(int id, String name, int age){
+    public AuthorEntity(int id, String name, int age){
         this.id = id;
         this.name = name;
         this.age = age;
@@ -30,10 +29,10 @@ public class Author {
     public String getName(){
         return name;
     }
-    public int getAge(){
+    public Integer getAge(){
         return age;
     }
-    public int getId(){
+    public Integer getId(){
         return id;
     }
     public void setName(String name){
@@ -43,7 +42,7 @@ public class Author {
         this.age = age;
     }
 
-    public void setId(int id){
+    public void setId(Integer id){
         this.id = id;
     }
 
@@ -51,8 +50,8 @@ public class Author {
     public boolean equals(Object o){
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
-        Author author = (Author) o;
-        return Objects.equals(id, author.id) && Objects.equals(age, author.age) && Objects.equals(name, author.name);
+        AuthorEntity authorEntity = (AuthorEntity) o;
+        return Objects.equals(id, authorEntity.id) && Objects.equals(age, authorEntity.age) && Objects.equals(name, authorEntity.name);
     }
 
     @Override

@@ -1,9 +1,8 @@
-package com.samcyber.quickstart.domain;
+package com.samcyber.quickstart.domain.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import org.springframework.lang.NonNull;
+
 import java.util.Objects;
 
 @Entity
@@ -11,7 +10,7 @@ import java.util.Objects;
 //@JsonIgnoreProperties(ignoreUnknown = true)
 // what this property would be doing is making it so any accepting JSON in the controller that looks to map to this
 // object will ignore any unnecessary properties in the received JSON that it wasn't expecting.
-public class Book {
+public class BookEntity {
 
     @Id
     private String isbn;
@@ -23,24 +22,24 @@ public class Book {
 //    when interacting with the database.
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "author_id")
-    private Author authorId;
+    private AuthorEntity authorEntityId;
 
     @JsonProperty("year")
 //    What this is doing is changing the objectMapper mapping in jackson so that the output JSON will replace
 //    this property name with 'year' instead of 'yearPublished'
     private String yearPublished;
 
-    public Book(){
+    public BookEntity(){
         this.isbn = null;
         this.title = null;
-        this.authorId = null;
+        this.authorEntityId = null;
         this.yearPublished = null;
     }
 
-    public Book(String isbn, String text, Author authorId, String yearPublished){
+    public BookEntity(String isbn, String text, AuthorEntity authorEntityId, String yearPublished){
         this.isbn = isbn;
         this.title = text;
-        this.authorId = authorId;
+        this.authorEntityId = authorEntityId;
         this.yearPublished = yearPublished;
     }
 
@@ -50,8 +49,8 @@ public class Book {
     public String getTitle(){
         return title;
     }
-    public Author getAuthorId(){
-        return authorId;
+    public AuthorEntity getAuthorId(){
+        return authorEntityId;
     }
     public String getYearPublished() {
         return yearPublished;
@@ -64,8 +63,8 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public void setAuthorId(Author id){
-        this.authorId = id;
+    public void setAuthorId(AuthorEntity id){
+        this.authorEntityId = id;
     }
     public void setYearPublished(String year) {
         this.yearPublished = year;
@@ -75,8 +74,8 @@ public class Book {
     public boolean equals(Object o){
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
-        Book book = (Book) o;
-        return Objects.equals(isbn, book.isbn) && Objects.equals(authorId, book.authorId) && Objects.equals(title, book.title);
+        BookEntity bookEntity = (BookEntity) o;
+        return Objects.equals(isbn, bookEntity.isbn) && Objects.equals(authorEntityId, bookEntity.authorEntityId) && Objects.equals(title, bookEntity.title);
     }
 
     @Override
@@ -84,7 +83,7 @@ public class Book {
         int result = 17;
         result = 31 * result + isbn.hashCode();
         result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + authorId.getId();
+        result = 31 * result + authorEntityId.getId();
         return result;
     }
 
@@ -93,7 +92,7 @@ public class Book {
         return "BookData{" +
                 "isbn='" + isbn +
                 "', text='" + title + "'" +
-                ", authorId=" + authorId.getId() + ", yearPublished='" +
+                ", authorId=" + authorEntityId.getId() + ", yearPublished='" +
                 yearPublished + "'}";
     }
 }
