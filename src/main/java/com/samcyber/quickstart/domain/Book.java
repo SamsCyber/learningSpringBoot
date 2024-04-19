@@ -1,15 +1,21 @@
 package com.samcyber.quickstart.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.springframework.lang.NonNull;
 import java.util.Objects;
 
 @Entity
 @Table(name = "books")
+//@JsonIgnoreProperties(ignoreUnknown = true)
+// what this property would be doing is making it so any accepting JSON in the controller that looks to map to this
+// object will ignore any unnecessary properties in the received JSON that it wasn't expecting.
 public class Book {
 
     @Id
     private String isbn;
+    @JsonProperty("Book Title")
     private String title;
 
 //    changed this authorId to be of type Author instead of Integer, this is possible, I believe, because
@@ -19,6 +25,9 @@ public class Book {
     @JoinColumn(name = "author_id")
     private Author authorId;
 
+    @JsonProperty("year")
+//    What this is doing is changing the objectMapper mapping in jackson so that the output JSON will replace
+//    this property name with 'year' instead of 'yearPublished'
     private String yearPublished;
 
     public Book(){
