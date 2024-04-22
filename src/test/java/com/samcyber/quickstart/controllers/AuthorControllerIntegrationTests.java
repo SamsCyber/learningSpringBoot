@@ -3,6 +3,7 @@ package com.samcyber.quickstart.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.samcyber.quickstart.TestDataUtil;
+import com.samcyber.quickstart.domain.dto.AuthorDto;
 import com.samcyber.quickstart.domain.entities.AuthorEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +34,7 @@ public class AuthorControllerIntegrationTests {
 
     @Test
     public void testThatCreateAuthorSuccessfullyReturnsHttp201Created() throws Exception {
-        AuthorEntity testAuthor = TestDataUtil.createTestAuthorA();
+        AuthorDto testAuthor = TestDataUtil.createTestAuthorDtoA();
         testAuthor.setId(null);
         String authorJson = objectMapper.writeValueAsString(testAuthor);
         mockMvc.perform(
@@ -47,7 +48,7 @@ public class AuthorControllerIntegrationTests {
 
     @Test
     public void testThatCreatedAuthorSuccessfullyReturnsSavedAuthor() throws Exception {
-        AuthorEntity testAuthor = TestDataUtil.createTestAuthorA();
+        AuthorDto testAuthor = TestDataUtil.createTestAuthorDtoA();
         testAuthor.setId(null);
         String authorJson = objectMapper.writeValueAsString(testAuthor);
         mockMvc.perform(
@@ -57,9 +58,9 @@ public class AuthorControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.id").isNumber()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.name").value("Jane Doe")
+                MockMvcResultMatchers.jsonPath("$.name").value(testAuthor.getName())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.age").value("80")
+                MockMvcResultMatchers.jsonPath("$.age").value(testAuthor.getAge())
         );
     }
 }

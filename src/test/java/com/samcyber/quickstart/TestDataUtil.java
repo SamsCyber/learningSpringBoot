@@ -1,5 +1,7 @@
 package com.samcyber.quickstart;
 
+import com.samcyber.quickstart.domain.dto.AuthorDto;
+import com.samcyber.quickstart.domain.dto.BookDto;
 import com.samcyber.quickstart.domain.entities.AuthorEntity;
 import com.samcyber.quickstart.domain.entities.BookEntity;
 
@@ -20,6 +22,9 @@ public final class TestDataUtil {
         return new AuthorEntity(3, "Peter Molyneux", 22);
     }
 
+    public static AuthorDto createTestAuthorDtoA() {
+        return new AuthorDto(3, "John Molyneux", 29);
+    }
     public static BookEntity createTestBookA(final AuthorEntity authorEntity) {
         return new BookEntity("987-654-321-0", "Big ol boys", authorEntity, "1999");
     }
@@ -28,6 +33,10 @@ public final class TestDataUtil {
     }
     public static BookEntity createTestBookC(final AuthorEntity authorEntity) {
         return new BookEntity("999-666-333-1", "Big ol bear hug", authorEntity, "10");
+    }
+
+    public static BookDto createTestBookDtoA(final AuthorDto authorDto) {
+        return new BookDto("12345", "dtoTestings", authorDto, 1010);
     }
 
 

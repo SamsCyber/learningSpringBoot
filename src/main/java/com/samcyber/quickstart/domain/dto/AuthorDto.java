@@ -33,11 +33,11 @@ public class AuthorDto {
     public void setName(String name){
         this.name = name;
     }
-    public void setAge(int age){
+    public void setAge(Integer age){
         this.age = age;
     }
 
-    public void setId(int id){
+    public void setId(Integer id){
         this.id = id;
     }
 

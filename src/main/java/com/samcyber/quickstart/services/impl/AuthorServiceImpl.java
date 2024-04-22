@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
-    private Mapper<AuthorEntity, AuthorDto> authorMapper;
-    private AuthorRepository authorRepository;
+    private final Mapper<AuthorEntity, AuthorDto> authorMapper;
+    private final AuthorRepository authorRepository;
 
     public AuthorServiceImpl(Mapper<AuthorEntity, AuthorDto> authorMapper, AuthorRepository authorRepository){
         this.authorMapper = authorMapper;

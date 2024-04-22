@@ -22,7 +22,7 @@ public class BookEntity {
 //    when interacting with the database.
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "author_id")
-    private AuthorEntity authorEntityId;
+    private AuthorEntity authorEntity;
 
     @JsonProperty("year")
 //    What this is doing is changing the objectMapper mapping in jackson so that the output JSON will replace
@@ -32,14 +32,14 @@ public class BookEntity {
     public BookEntity(){
         this.isbn = null;
         this.title = null;
-        this.authorEntityId = null;
+        this.authorEntity = null;
         this.yearPublished = null;
     }
 
-    public BookEntity(String isbn, String text, AuthorEntity authorEntityId, String yearPublished){
+    public BookEntity(String isbn, String text, AuthorEntity authorEntity, String yearPublished){
         this.isbn = isbn;
         this.title = text;
-        this.authorEntityId = authorEntityId;
+        this.authorEntity = authorEntity;
         this.yearPublished = yearPublished;
     }
 
@@ -50,7 +50,7 @@ public class BookEntity {
         return title;
     }
     public AuthorEntity getAuthorId(){
-        return authorEntityId;
+        return authorEntity;
     }
     public String getYearPublished() {
         return yearPublished;
@@ -63,8 +63,8 @@ public class BookEntity {
         this.isbn = isbn;
     }
 
-    public void setAuthorId(AuthorEntity id){
-        this.authorEntityId = id;
+    public void setAuthor(AuthorEntity author){
+        this.authorEntity = author;
     }
     public void setYearPublished(String year) {
         this.yearPublished = year;
@@ -75,7 +75,7 @@ public class BookEntity {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
         BookEntity bookEntity = (BookEntity) o;
-        return Objects.equals(isbn, bookEntity.isbn) && Objects.equals(authorEntityId, bookEntity.authorEntityId) && Objects.equals(title, bookEntity.title);
+        return Objects.equals(isbn, bookEntity.isbn) && Objects.equals(authorEntity, bookEntity.authorEntity) && Objects.equals(title, bookEntity.title);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class BookEntity {
         int result = 17;
         result = 31 * result + isbn.hashCode();
         result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + authorEntityId.getId();
+        result = 31 * result + authorEntity.getId();
         return result;
     }
 
@@ -92,7 +92,7 @@ public class BookEntity {
         return "BookData{" +
                 "isbn='" + isbn +
                 "', text='" + title + "'" +
-                ", authorId=" + authorEntityId.getId() + ", yearPublished='" +
+                ", authorId=" + authorEntity.getId() + ", yearPublished='" +
                 yearPublished + "'}";
     }
 }
