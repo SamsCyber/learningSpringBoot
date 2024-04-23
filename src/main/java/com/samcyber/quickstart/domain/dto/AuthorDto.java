@@ -1,22 +1,21 @@
-package com.samcyber.quickstart.domain;
+package com.samcyber.quickstart.domain.dto;
 
-import org.springframework.lang.NonNull;
 
 import java.util.Objects;
 
-public class Author {
+public class AuthorDto {
 
     private Integer id;
     private String name;
     private Integer age;
 
-    public Author(){
+    public AuthorDto(){
         this.id = null;
         this.name = null;
         this.age = null;
     }
 
-    public Author(int id, String name, int age){
+    public AuthorDto(int id, String name, int age){
         this.id = id;
         this.name = name;
         this.age = age;
@@ -25,20 +24,20 @@ public class Author {
     public String getName(){
         return name;
     }
-    public int getAge(){
+    public Integer getAge(){
         return age;
     }
-    public int getId(){
+    public Integer getId(){
         return id;
     }
     public void setName(String name){
         this.name = name;
     }
-    public void setAge(int age){
+    public void setAge(Integer age){
         this.age = age;
     }
 
-    public void setId(int id){
+    public void setId(Integer id){
         this.id = id;
     }
 
@@ -46,7 +45,7 @@ public class Author {
     public boolean equals(Object o){
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
-        Author author = (Author) o;
+        AuthorDto author = (AuthorDto) o;
         return Objects.equals(id, author.id) && Objects.equals(age, author.age) && Objects.equals(name, author.name);
     }
 
@@ -61,9 +60,8 @@ public class Author {
 
     @Override
     public String toString(){
-        return "AuthorData{" +
-                "id=" + id +
-                ", name='" + name + "'" +
+        return "{" +
+                "name='" + name + "'" +
                 ", age=" + age + '}';
     }
 }
