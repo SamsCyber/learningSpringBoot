@@ -65,7 +65,7 @@ public class AuthorEntity {
 
     @Override
     public String toString(){
-        return "AuthorData{" +
+        return "{" +
                 "name='" + name + "'" +
                 ", age=" + age + '}';
     }

@@ -7,6 +7,10 @@ import com.samcyber.quickstart.repositories.BookRepository;
 import com.samcyber.quickstart.services.BookService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.StreamSupport;
+
 @Service
 public class BookServiceImpl implements BookService {
 
@@ -24,5 +28,17 @@ public class BookServiceImpl implements BookService {
         mappedEntity.setIsbn(isbn);
         mappedEntity = bookRepository.save(mappedEntity);
         return mapper.mapTo(mappedEntity);
+    }
+
+    @Override
+    public List<BookDto> findAll(){
+        List<BookEntity> allBooks = StreamSupport.stream(bookRepository.findAll().spliterator(), false).toList();
+        return allBooks.stream().map(mapper::mapTo).toList();
+    }
+
+    @Override
+    public Optional<BookDto> findBook(String isbn) {
+        Optional<BookEntity> bookIfExists = bookRepository.findById(isbn);
+        return bookIfExists.map(mapper::mapTo);
     }
 }

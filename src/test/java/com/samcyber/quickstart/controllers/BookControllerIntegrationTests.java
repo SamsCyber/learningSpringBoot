@@ -2,8 +2,10 @@ package com.samcyber.quickstart.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.samcyber.quickstart.TestDataUtil;
+import com.samcyber.quickstart.domain.dto.AuthorDto;
 import com.samcyber.quickstart.domain.dto.BookDto;
 import com.samcyber.quickstart.domain.entities.BookEntity;
+import com.samcyber.quickstart.services.BookService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +24,15 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 public class BookControllerIntegrationTests {
 
-    private MockMvc mockMvc;
-    private ObjectMapper objectMapper;
+    private final BookService bookService;
+    private final MockMvc mockMvc;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public BookControllerIntegrationTests(MockMvc mockMvc){
+    public BookControllerIntegrationTests(MockMvc mockMvc, BookService bookService){
         this.mockMvc = mockMvc;
         this.objectMapper = new ObjectMapper();
+        this.bookService = bookService;
     }
 
     @Test
@@ -75,4 +79,89 @@ public class BookControllerIntegrationTests {
                 MockMvcResultMatchers.jsonPath("$.yearPublished").value(testBook.getYearPublished())
         );
     }
+
+    @Test
+    public void testThatListBooksReturnsHttpStatus200() throws Exception{
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testThatListBooksReturnsListOfBooks() throws Exception{
+        BookDto testBookA = TestDataUtil.createTestBookDtoA(null);
+        BookDto testBookB = TestDataUtil.createTestBookDtoB(null);
+
+        bookService.createBook(testBookA.getIsbn(), testBookA);
+        bookService.createBook(testBookB.getIsbn(), testBookB);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[1].isbn").value(testBookB.getIsbn())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[1].title").value(testBookB.getTitle())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[1].author").value(testBookB.getAuthor())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[1].yearPublished").value(testBookB.getYearPublished())
+        );
+    }
+
+    @Test
+    public void testThatGetBookReturnsHttpStatus200WhenBookExists() throws Exception{
+        BookDto testBook = TestDataUtil.createTestBookDtoA(null);
+        bookService.createBook(testBook.getIsbn(), testBook);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/books/" + testBook.getIsbn())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testThatGetBookReturnsHttpStatus404WhenBookDoesNotExist() throws Exception{
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/books/-1")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void TestThatGetBookReturnsTheCorrectBookIfItExists() throws Exception{
+        AuthorDto testAuthorDto = TestDataUtil.createTestAuthorDtoA();
+        BookDto testBookDto = TestDataUtil.createTestBookDtoA(testAuthorDto);
+
+        String jsonTestAuthorDto = objectMapper.writeValueAsString(testAuthorDto);
+        String jsonTestBookDto = objectMapper.writeValueAsString(testBookDto);
+
+//        Use this variable instead to simulate a user inserting a book via isbn URI different to the one contained in
+//        their bookDto object
+        String isbnInUrl = "123-changeIsbn-678";
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/books/" + isbnInUrl)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonTestBookDto)
+        );
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/books/" + isbnInUrl)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.isbn").value(isbnInUrl)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.title").value(testBookDto.getTitle())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.author.id").value(1)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.author.name").value(testAuthorDto.getName())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.author.age").value(testAuthorDto.getAge())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.yearPublished").value(testBookDto.getYearPublished())
+        );
+    }
+
 }

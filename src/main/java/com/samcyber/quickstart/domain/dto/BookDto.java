@@ -21,10 +21,10 @@ public class BookDto {
         this.yearPublished = null;
     }
 
-    public BookDto(String isbn, String text, AuthorDto authorEntityId, Integer yearPublished){
+    public BookDto(String isbn, String title, AuthorDto authorDto, Integer yearPublished){
         this.isbn = isbn;
-        this.title = text;
-        this.author = authorEntityId;
+        this.title = title;
+        this.author = authorDto;
         this.yearPublished = yearPublished;
     }
 
@@ -77,7 +77,7 @@ public class BookDto {
         return "BookData{" +
                 "isbn='" + isbn +
                 "', text='" + title + "'" +
-                ", authorId=" + author.getId() + ", yearPublished='" +
+                ", author=" + author.toString() + ", yearPublished='" +
                 yearPublished + "'}";
     }
 

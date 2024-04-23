@@ -49,7 +49,7 @@ public class BookEntity {
     public String getTitle(){
         return title;
     }
-    public AuthorEntity getAuthorId(){
+    public AuthorEntity getAuthor(){
         return authorEntity;
     }
     public String getYearPublished() {
@@ -92,7 +92,7 @@ public class BookEntity {
         return "BookData{" +
                 "isbn='" + isbn +
                 "', text='" + title + "'" +
-                ", authorId=" + authorEntity.getId() + ", yearPublished='" +
+                ", author=" + authorEntity.toString() + ", yearPublished='" +
                 yearPublished + "'}";
     }
 }

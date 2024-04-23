@@ -60,7 +60,7 @@ public class AuthorDto {
 
     @Override
     public String toString(){
-        return "AuthorData{" +
+        return "{" +
                 "name='" + name + "'" +
                 ", age=" + age + '}';
     }
