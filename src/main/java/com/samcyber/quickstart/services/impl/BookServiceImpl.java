@@ -23,7 +23,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto createBook(String isbn, BookDto book) {
+    public BookDto createOrUpdateBook(String isbn, BookDto book) {
         BookEntity mappedEntity = mapper.mapFrom(book);
         mappedEntity.setIsbn(isbn);
         mappedEntity = bookRepository.save(mappedEntity);
@@ -40,5 +40,10 @@ public class BookServiceImpl implements BookService {
     public Optional<BookDto> findBook(String isbn) {
         Optional<BookEntity> bookIfExists = bookRepository.findById(isbn);
         return bookIfExists.map(mapper::mapTo);
+    }
+
+    @Override
+    public boolean bookExists(String isbn) {
+        return bookRepository.existsById(isbn);
     }
 }
