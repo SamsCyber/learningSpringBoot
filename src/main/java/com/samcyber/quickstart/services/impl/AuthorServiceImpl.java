@@ -24,7 +24,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public AuthorDto createAuthor(AuthorDto author) {
+    public AuthorDto createUpdateAuthor(AuthorDto author) {
         AuthorEntity authorEntity = authorMapper.mapFrom(author);
         AuthorEntity savedEntity = authorRepository.save(authorEntity);
         return authorMapper.mapTo(savedEntity);
@@ -40,5 +40,24 @@ public class AuthorServiceImpl implements AuthorService {
     public Optional<AuthorDto> findAuthor(int id){
         Optional<AuthorEntity> authorIfExists = authorRepository.findById(id);
         return authorIfExists.map(authorMapper::mapTo);
+    }
+
+    @Override
+    public boolean authorExists(int id) {
+        return authorRepository.existsById(id);
+    }
+
+    @Override
+    public AuthorDto partialUpdate(AuthorDto author) {
+        return authorRepository.findById(author.getId()).map(existingAuthor -> {
+            Optional.ofNullable(author.getName()).ifPresent(existingAuthor::setName);
+            Optional.ofNullable(author.getAge()).ifPresent(existingAuthor::setAge);
+            return authorMapper.mapTo(authorRepository.save(existingAuthor));
+        }).orElseThrow(() -> new RuntimeException("Author does not exist"));
+    }
+
+    @Override
+    public void delete(int id) {
+        authorRepository.deleteById(id);
     }
 }

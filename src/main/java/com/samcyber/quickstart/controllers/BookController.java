@@ -1,14 +1,11 @@
 package com.samcyber.quickstart.controllers;
 
 import com.samcyber.quickstart.domain.dto.BookDto;
-import com.samcyber.quickstart.domain.entities.BookEntity;
-import com.samcyber.quickstart.mappers.Mapper;
 import com.samcyber.quickstart.services.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,9 +19,14 @@ public class BookController {
     }
 
     @PutMapping("/books/{isbn}")
-    public ResponseEntity<BookDto> createBook(@PathVariable("isbn") String isbn, @RequestBody BookDto bookDto){
-        BookDto savedBookDto = bookService.createBook(isbn, bookDto);
-        return new ResponseEntity<>(savedBookDto, HttpStatus.CREATED);
+    public ResponseEntity<BookDto> createUpdateBook(@PathVariable("isbn") String isbn, @RequestBody BookDto bookDto){
+        boolean alreadyExists = bookService.bookExists(isbn);
+        BookDto createdOrUpdatedBookDto = bookService.createOrUpdateBook(isbn, bookDto);
+        if(!alreadyExists){
+            return new ResponseEntity<>(createdOrUpdatedBookDto, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(createdOrUpdatedBookDto, HttpStatus.OK);
+        }
     }
 
     @GetMapping("/books")
@@ -38,5 +40,20 @@ public class BookController {
         return bookIfExists.map(
                 bookDto -> new ResponseEntity<>(bookDto, HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PatchMapping("/books/{isbn}")
+    public ResponseEntity<BookDto> partialUpdateBook(@PathVariable("isbn") String isbn, @RequestBody BookDto bookDto){
+        if(!bookService.bookExists(isbn)){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        BookDto updatedBook = bookService.partialUpdate(isbn, bookDto);
+        return new ResponseEntity<>(updatedBook, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/books/{isbn}")
+    public ResponseEntity<HttpStatus> deleteBook(@PathVariable("isbn") String isbn){
+        bookService.deleteBook(isbn);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
