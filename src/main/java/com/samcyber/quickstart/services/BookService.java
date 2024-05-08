@@ -14,4 +14,8 @@ public interface BookService {
     public Optional<BookDto> findBook(String isbn);
 
     public boolean bookExists(String isbn);
+
+    BookDto partialUpdate(String isbn, BookDto bookDto);
+
+    void deleteBook(String isbn);
 }

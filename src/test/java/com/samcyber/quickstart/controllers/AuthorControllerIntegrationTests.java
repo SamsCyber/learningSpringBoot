@@ -212,4 +212,52 @@ public class AuthorControllerIntegrationTests {
                 MockMvcResultMatchers.jsonPath("$.age").value(testAuthorB.getAge())
         );
     }
+
+    @Test
+    public void testThatDeleteAuthorReturnsStatus204ForNonExistingAuthors() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/authors/123456789")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    public void testThatDeleteAuthorReturnsStatus204ForExistingAuthors() throws Exception {
+        AuthorDto testAuthorA = TestDataUtil.createTestAuthorDtoA();
+        authorService.createUpdateAuthor(testAuthorA);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/authors/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    public void testThatDeleteAuthorSuccessfullyRemovesAuthor() throws Exception {
+        AuthorDto testAuthorA = TestDataUtil.createTestAuthorDtoA();
+        authorService.createUpdateAuthor(testAuthorA);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/authors/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").value(1)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value(testAuthorA.getName())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.age").value(testAuthorA.getAge())
+        );
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/authors/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/authors/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNotFound()
+        );
+    }
 }

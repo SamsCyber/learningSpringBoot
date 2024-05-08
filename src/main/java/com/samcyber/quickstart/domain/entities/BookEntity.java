@@ -20,7 +20,7 @@ public class BookEntity {
 //    changed this authorId to be of type Author instead of Integer, this is possible, I believe, because
 //    now we are using JPA, the API understands java objects and their differences and handles conversion for us
 //    when interacting with the database.
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "author_id")
     private AuthorEntity authorEntity;
 

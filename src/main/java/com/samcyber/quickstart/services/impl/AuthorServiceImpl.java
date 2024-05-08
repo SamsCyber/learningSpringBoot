@@ -49,12 +49,15 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public AuthorDto partialUpdate(AuthorDto author) {
-        AuthorEntity toUpdateAuthor = authorMapper.mapFrom(author);
-
-        return authorRepository.findById(toUpdateAuthor.getId()).map(existingAuthor -> {
-            Optional.ofNullable(toUpdateAuthor.getName()).ifPresent(existingAuthor::setName);
-            Optional.ofNullable(toUpdateAuthor.getAge()).ifPresent(existingAuthor::setAge);
+        return authorRepository.findById(author.getId()).map(existingAuthor -> {
+            Optional.ofNullable(author.getName()).ifPresent(existingAuthor::setName);
+            Optional.ofNullable(author.getAge()).ifPresent(existingAuthor::setAge);
             return authorMapper.mapTo(authorRepository.save(existingAuthor));
         }).orElseThrow(() -> new RuntimeException("Author does not exist"));
+    }
+
+    @Override
+    public void delete(int id) {
+        authorRepository.deleteById(id);
     }
 }

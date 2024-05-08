@@ -1,8 +1,12 @@
 package com.samcyber.quickstart.domain.dto;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.samcyber.quickstart.mappers.deserializers.authorDtoDeserializer;
+
 import java.util.Objects;
 
+@JsonDeserialize(using = authorDtoDeserializer.class)
 public class AuthorDto {
 
     private Integer id;
@@ -15,7 +19,7 @@ public class AuthorDto {
         this.age = null;
     }
 
-    public AuthorDto(int id, String name, int age){
+    public AuthorDto(Integer id, String name, Integer age){
         this.id = id;
         this.name = name;
         this.age = age;

@@ -16,4 +16,6 @@ public interface AuthorService {
     public boolean authorExists(int id);
 
     public AuthorDto partialUpdate(AuthorDto author);
+
+    void delete(int id);
 }
